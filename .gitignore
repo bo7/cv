@@ -1,0 +1,27 @@
+# Environment and Python
+.env
+.env.*
+__pycache__/
+*.pyc
+venv/
+
+# Logs and temp files
+logs/
+static/temp/
+*.log
+temp/
+
+# System files
+.DS_Store
+.idea/
+.vscode/
+
+# Generated files
+*.pdf
+*.tex
+static/images/*
+data/*.tex
+
+# Keep template files
+!data/cv_template.tex
+!data/cv_template_de.tex 

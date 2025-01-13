@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-end mb-4">
+        <a href="{{ url_for('logout') }}" 
+           class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-200">
+            Logout
+        </a>
+    </div>
+    <div class="max-w-lg mx-auto">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">CV Download Portal</h1>
+        
+        <!-- Image Carousel -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Medienberichte</h2>
+            <div class="relative">
+                <!-- Slideshow container -->
+                <div class="slideshow-container">
+                    {% for media in media_files %}
+                    <div class="slide fade">
+                        <img src="{{ media.src }}" 
+                             alt="{{ media.alt }}" 
+                             class="w-full h-64 object-cover rounded-lg shadow-md cursor-pointer"
+                             onclick="openImage(this.src)"/>
+                        <p class="text-sm text-gray-600 mt-2 text-center">
+                            {{ media.title }}
+                        </p>
+                    </div>
+                    {% endfor %}
+
+                    <!-- Navigation dots -->
+                    <div class="flex justify-center mt-4">
+                        {% for media in media_files %}
+                        <span class="dot cursor-pointer mx-1" onclick="currentSlide({{ loop.index }})"></span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add this section after the image carousel and before the download options -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Ask About Sven</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Your Question</label>
+                    <textarea 
+                        id="question" 
+                        class="w-full p-2 border rounded-md h-24 resize-none"
+                        placeholder="Ask a question about Sven Bohnstedt..."></textarea>
+                </div>
+                <button 
+                    onclick="askQuestion()" 
+                    class="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 transition duration-200">
+                    Ask Question
+                </button>
+                <div id="answer" class="mt-4 p-4 bg-gray-50 rounded-md hidden">
+                    <h3 class="font-medium text-gray-900 mb-2">Answer:</h3>
+                    <p id="answer-text" class="text-gray-600"></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Download Options -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Download Options</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Language</label>
+                    <select id="language" class="w-full p-2 border rounded-md">
+                        <option value="en">English</option>
+                        <option value="de">German</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Format</label>
+                    <select id="format" class="w-full p-2 border rounded-md">
+                        <option value="pdf">PDF</option>
+                        <option value="latex">LaTeX</option>
+                        <option value="md">Markdown</option>
+                    </select>
+                </div>
+
+                <button onclick="downloadCV()" class="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition duration-200">
+                    Download CV
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.slideshow-container {
+    position: relative;
+}
+
+.slide {
+    display: none;
+}
+
+.fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+
+.dot {
+    height: 12px;
+    width: 12px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+    background-color: #0073e6;
+}
+</style>
+
+<script>
+let slideIndex = 1;
+let slideTimer;
+
+function showSlides(n) {
+    let slides = document.getElementsByClassName("slide");
+    let dots = document.getElementsByClassName("dot");
+    
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+    
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    for (let i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    
+    slides[slideIndex-1].style.display = "block";
+    dots[slideIndex-1].className += " active";
+    
+    // Reset timer
+    clearTimeout(slideTimer);
+    slideTimer = setTimeout(() => plusSlides(1), 5000);
+}
+
+function plusSlides(n) {
+    showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+    showSlides(slideIndex = n);
+}
+
+function openImage(src) {
+    window.open(src);
+}
+
+function downloadCV() {
+    const language = document.getElementById('language').value;
+    const format = document.getElementById('format').value;
+    window.location.href = `/download/${format}/${language}`;
+}
+
+// Start slideshow when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    showSlides(slideIndex);
+});
+
+async function askQuestion() {
+    const question = document.getElementById('question').value;
+    const answerDiv = document.getElementById('answer');
+    const answerText = document.getElementById('answer-text');
+    
+    if (!question.trim()) {
+        alert('Please enter a question');
+        return;
+    }
+    
+    try {
+        answerText.textContent = 'Loading...';
+        answerDiv.classList.remove('hidden');
+        
+        const response = await fetch('/ask', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `question=${encodeURIComponent(question)}`
+        });
+        
+        const answer = await response.text();
+        answerText.textContent = answer;
+    } catch (error) {
+        answerText.textContent = 'Error: ' + error.message;
+    }
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,14 @@
+[Unit]
+Description=CV Flask Application
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/cvflask
+Environment="PATH=/var/www/cvflask/venv/bin"
+ExecStart=/var/www/cvflask/venv/bin/gunicorn --workers 4 --bind 127.0.0.1:5590 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target 

@@ -1,0 +1,56 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[german]{babel}
+\usepackage{hyperref}
+\usepackage[top=2cm,bottom=2cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{enumitem}
+\usepackage{fontawesome}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{multirow}
+
+% Custom colors
+\definecolor{primary}{RGB}{0, 115, 230}
+\definecolor{secondary}{RGB}{51, 51, 51}
+\definecolor{accent}{RGB}{128, 128, 128}
+
+% Section formatting
+\titleformat{\section}
+    {\Large\bfseries\color{primary}}
+    {}{0em}{}[\titlerule]
+    
+\titleformat{\subsection}
+    {\large\bfseries\color{secondary}}
+    {}{0em}{}
+
+\titleformat{\subsubsection}
+    {\normalsize\bfseries\color{secondary}}
+    {}{0em}{}
+
+% Custom commands
+\newcommand{\role}[2]{{\bfseries #1} \hfill {\color{accent}#2}}
+\newcommand{\company}[1]{{\large\bfseries #1}}
+\newcommand{\bulletpoint}[1]{\item #1}
+
+\begin{document}
+
+\begin{center}
+    {\Huge\bfseries Lebenslauf}
+\end{center}
+
+\section*{Persönliche Informationen}
+\begin{tabularx}{\textwidth}{@{}l X l X@{}}
+    \textbf{Name:} & Sven Bohnstedt & \textbf{E-Mail:} & sven.bohnstedt@gmail.com \\
+    \textbf{Adresse:} & Emkendorfstraße 10a & \textbf{Telefon:} & +49 (0) 171 862 92 19 \\
+    & 22605 Hamburg & \textbf{Geburtsdatum:} & 26. August 1973 \\
+    \textbf{Nationalität:} & Deutsch & \textbf{Familienstand:} & Verheiratet, 2 Kinder
+\end{tabularx}
+
+\section{Berufserfahrung}
+
+[CV content will be dynamically inserted here]
+
+\end{document} 

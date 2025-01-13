@@ -1,0 +1,7 @@
+flask
+markdown2
+weasyprint
+python-dotenv
+anthropic
+gunicorn
+pango 
