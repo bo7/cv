@@ -18,10 +18,6 @@ temp/
 
 # Generated files
 *.pdf
-*.tex
-static/images/*
-data/*.tex
-
-# Keep template files
+## Keep template files
 !data/cv_template.tex
 !data/cv_template_de.tex 

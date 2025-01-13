@@ -507,7 +507,7 @@ if __name__ == '__main__':
         # Set debug mode and run
         app.debug = True
         logger.info("Starting Flask application in debug mode")
-        app.run(host='127.0.0.1', port=5590, debug=True)
+        app.run(host='0.0.0.0', port=5590, debug=True)
         
     except Exception as e:
         logger.error(f"Error during application startup: {str(e)}")

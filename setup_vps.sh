@@ -25,10 +25,28 @@ cd /var/www/cvflask
 # Clone repository
 git clone https://github.com/bo7/cv.git .
 
+# Create necessary directories
+mkdir -p static/images
+mkdir -p static/temp
+mkdir -p logs
+mkdir -p data
+mkdir -p templates
+
+# Copy template files
+cp -r templates/* templates/
+cp -r data/* data/
+
 # Setup Python virtual environment
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+
+# Set proper permissions
+sudo chown -R $USER:$USER /var/www/cvflask
+sudo chmod -R 755 /var/www/cvflask
+sudo chmod -R 755 static
+sudo chmod -R 755 templates
+sudo chmod -R 755 data
 
 # Create .env file (manually add sensitive values later)
 cat > .env << EOL
@@ -40,4 +58,10 @@ EOL
 # Set proper permissions for .env
 chmod 600 .env
 
-echo "Environment file created with secure permissions. Please update the .env file with your actual credentials." 
+echo "Environment file created with secure permissions. Please update the .env file with your actual credentials."
+
+# Verify files exist
+echo "Checking critical files..."
+ls -l templates/
+ls -l data/
+ls -l static/ 
